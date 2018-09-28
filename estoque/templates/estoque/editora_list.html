@@ -1,0 +1,38 @@
+{% extends 'estoque/base.html' %}
+
+{% block content %}
+
+<a class="button primary" href="{% url 'editora-create' %}">Nova Editora</a>
+
+
+<table class="w3-table-all w3-card-4">
+
+
+<!--<table class="striped">-->
+  <caption> Editoras</caption>
+  <thead>
+    <tr>
+      <th>---</th>
+      <th>PK</th>
+      <th>Nome</th>
+      <th>Avaliacao</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for obj in object_list %}
+    <tr class="w3-hover-green">
+      {# contador de iterações do for #}
+      <td>{{ forloop.counter }}</td>
+      <td>{{ obj.pk }}</td>
+      <td> <a href="{%url 'autor-update' obj.pk %}"> {{obj.nome }}</td>
+      <td>{{ obj.idade }}</td>
+    </tr>
+    {% empty %}
+      <tr class="w3-hover-green">
+        <td class="is-text-center" colspan="100%">Nenhuma editora Cadastrada</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}
