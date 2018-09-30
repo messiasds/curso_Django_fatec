@@ -17,6 +17,8 @@ from django.views.generic.edit import ModelFormMixin
 from estoque.models import Autor, Livro, Editora, Loja
 from estoque.forms import LivroForm, LivroSearchForm
 
+#mixin do login
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def index(request):
     livro_mais_barato = Livro.objects.order_by('-preco').last()
@@ -86,8 +88,11 @@ class AutorListView(PageInfoMixin, ModelFormMixin, ListView):
         self.object = None
         return super().get(request, *args, **kwargs)
 
+from django.contrib.auth.decorators import login_required
 
-class AutorCreateView(PageInfoMixin, CreateView):
+
+class AutorCreateView(LoginRequiredMixin,PageInfoMixin, CreateView):
+
     model = Autor
     fields = '__all__'
     success_url = reverse_lazy('autor-list')
@@ -140,7 +145,7 @@ class LivroListView(PageInfoMixin, ListView):
     model = Livro
 
 
-class LivroCreateView(PageInfoMixin, CreateView):
+class LivroCreateView(LoginRequiredMixin,PageInfoMixin, CreateView):
     model = Livro
     form_class = LivroForm
     success_url = reverse_lazy('livro-list')
@@ -179,7 +184,7 @@ class LivroJsonListView(JsonListMixin, LivroListView):
 
 ## views da editora
 
-class EditoraCreateView(CreateView):
+class EditoraCreateView(LoginRequiredMixin, CreateView):
 
     model = Editora
     fields = "__all__"
@@ -201,7 +206,7 @@ class EditoraUpdateView(UpdateView):
 
 ## views Loja
 
-class LojaCreateView(CreateView):
+class LojaCreateView(LoginRequiredMixin,CreateView):
 
     model = Loja
     fields = ['nome','quantidade_de_clientes']
@@ -219,4 +224,7 @@ class LojaUpdateView(UpdateView):
     model = Loja
     fileds  = "__all__"
     success_url = reverse_lazy("loja-list")
+
+
+# LOGIN #
 

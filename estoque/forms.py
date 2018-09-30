@@ -10,7 +10,7 @@ class LivroForm(forms.ModelForm):
             autores__in=self.cleaned_data['autores']
         ).distinct()
         media = livros.aggregate(Avg('avaliacao'))
-        return media.get('avaliacao__avg', 0)
+        return media.get('avaliacao__avg', 0) or 0
 
     def save(self, commit=True):
         instance = super().save(commit=False)
