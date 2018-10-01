@@ -48,3 +48,20 @@ class LivroSearchForm(forms.Form):
             if self.cleaned_data.get('editora'):
                 q = q & Q(editora=self.cleaned_data['editora'])
         return Livro.objects.filter(q)
+
+
+class LivroBuscaPublicaForm(forms.Form):
+    nome = forms.CharField(required=False)
+    autores = forms.CharField(required=False)
+    #editora = forms.ModelChoiceField(required=False, queryset=Editora.objects)
+
+    def get_queryset(self):
+        q = Q()
+        if self.is_valid():
+            if self.cleaned_data.get('nome'):
+                q = q & Q(nome__icontains=self.cleaned_data['nome'])
+            if self.cleaned_data.get('autores'):
+                q = q & Q(autores__nome__icontains=self.cleaned_data['autores'])
+            if self.cleaned_data.get('editora'):
+                q = q & Q(editora=self.cleaned_data['editora'])
+        return Livro.objects.filter(q)

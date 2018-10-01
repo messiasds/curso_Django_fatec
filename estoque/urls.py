@@ -1,15 +1,19 @@
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.LivroSearchForm.as_view(template_name='index_publica.html'), name='index'),
+    path('principal/',views.principal,name='principal'),
     path('livros/', include([
+        path('teste/',views.LivroBuscaPublica.as_view(),name='livro-busca'),
         path('', views.LivroSearchForm.as_view(), name='livro-list'),
         path('list.json', views.LivroJsonListView.as_view(), name='livro-json-list'),
         path('novo/', views.LivroCreateView.as_view(), name='livro-create'),
         path('<int:pk>/', views.LivroUpdateView.as_view(), name='livro-update'),
     ])),
+
     path('autores/', include([
         path('', views.AutorListView.as_view(), name='autor-list'),
         path('taken/', views.autor_nome_registrado, name='autor-taken'),

@@ -43,6 +43,7 @@
     event.preventDefault();
 
     var form = $(this);
+    alert(form.serialize());
     $.ajax({
         url: form.attr("action"),
         data: form.serialize(),
@@ -53,7 +54,7 @@
             alert('ERRO');
           } else {
             $("#autores-table").load( "{% url 'autor-list' %} #autores-table" );
-            alert('Cadastrado om sucesso');
+            alert('Cadastrado com sucesso !!');
             form.trigger("reset");
           }
         }

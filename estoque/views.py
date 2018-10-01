@@ -2,6 +2,8 @@ from django.shortcuts import render
 
 # Create your views here.
 
+
+
 from django.apps import apps
 from django.db.models import Avg
 from django.http import JsonResponse
@@ -15,12 +17,19 @@ from django.views.generic.edit import FormMixin
 from django.views.generic.edit import ModelFormMixin
 
 from estoque.models import Autor, Livro, Editora, Loja
-from estoque.forms import LivroForm, LivroSearchForm
-
+from estoque.forms import LivroForm, LivroSearchForm, LivroBuscaPublicaForm
 #mixin do login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
-def index(request):
+
+
+    
+
+
+
+@login_required
+def principal(request):
     livro_mais_barato = Livro.objects.order_by('-preco').last()
     livro_mais_caro = Livro.objects.order_by('-preco').first()
     livro_preco_medio = Livro.objects.filter().aggregate(Avg('preco')) or 0
@@ -39,6 +48,10 @@ def index(request):
         'page_info': 'Início',
     })
 
+def index_publica(request):
+
+    return render(request,'estoque/index_publica.html')
+
 
 def autor_nome_registrado(request):
     nome = request.GET.get('nome', None)
@@ -50,6 +63,8 @@ def autor_nome_registrado(request):
         data['message'] = 'O Autor já está cadastrado'
     return JsonResponse(data)
 
+
+## Mixins ##
 
 class JsonListMixin(object):
     json_fields = []
@@ -79,6 +94,8 @@ class PageInfoMixin(object):
             kwargs.update(self.get_page_info())
         return super().get_context_data(**kwargs)
 
+ 
+#Autor
 
 class AutorListView(PageInfoMixin, ModelFormMixin, ListView):
     model = Autor
@@ -119,11 +136,13 @@ class AutorCreateView(LoginRequiredMixin,PageInfoMixin, CreateView):
             return super().form_invalid(form)
 
 
-class AutorUpdateView(PageInfoMixin, UpdateView):
+class AutorUpdateView(LoginRequiredMixin,PageInfoMixin, UpdateView):
     model = Autor
     fields = '__all__'
     success_url = reverse_lazy('autor-list')
 
+
+# delete
 
 class GenericDeleteView(DeleteView):
     model = None
@@ -141,6 +160,8 @@ class GenericDeleteView(DeleteView):
         return self.request.GET.get('success_url', '/')
 
 
+#Livro
+
 class LivroListView(PageInfoMixin, ListView):
     model = Livro
 
@@ -151,7 +172,7 @@ class LivroCreateView(LoginRequiredMixin,PageInfoMixin, CreateView):
     success_url = reverse_lazy('livro-list')
 
 
-class LivroUpdateView(PageInfoMixin, UpdateView):
+class LivroUpdateView(LoginRequiredMixin,PageInfoMixin, UpdateView):
     model = Livro
     fields = '__all__'
     success_url = reverse_lazy('livro-list')
@@ -195,7 +216,7 @@ class EditoraListView(ListView):
     model = Editora
     fields = "__all__"
 
-class EditoraUpdateView(UpdateView):
+class EditoraUpdateView(LoginRequiredMixin,UpdateView):
 
     model = Editora
     fileds = "__init__"
@@ -219,12 +240,21 @@ class LojaListView(ListView):
     fields = "__all__"
     success_url = reverse_lazy("loja-list")
 
-class LojaUpdateView(UpdateView):
+class LojaUpdateView(LoginRequiredMixin,UpdateView):
 
     model = Loja
     fileds  = "__all__"
     success_url = reverse_lazy("loja-list")
 
 
-# LOGIN #
+# BUSCA PUBLICA #
+
+
+
+class LivroBuscaPublica(PageInfoMixin, SearchFormListView):
+    
+    template_name = 'estoque/livro_busca.html'
+    model = Livro
+    form_class = LivroBuscaPublicaForm
+    
 

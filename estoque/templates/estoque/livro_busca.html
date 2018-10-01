@@ -1,0 +1,65 @@
+{% extends 'estoque/base.html' %}
+
+
+
+{% block content %}
+
+<h1> livro busca publica</h1>
+<form method="GET" id="livro-form">
+
+<button type="submit" class="button primary">Pesquisar</button>
+  
+{{form.as }}
+
+
+
+</form>
+
+<div id="#livros-table">
+
+<table class="striped" id="livros-table">
+  <caption>
+    {{ page_info_plural }}
+    <span class="is-right">
+      <a class="button primary" href="{% url 'livro-create' %}">Novo</a>
+    </span>
+  </caption>
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Páginas</th>
+      <th>Preço</th>
+      <th>Avaliação</th>
+      <th>Autores</th>
+      <th>Editora</th>
+      <th>Data da Publicação</th>
+      <th>Remover</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for obj in object_list %}
+    <tr>
+      <td>
+      </td>
+      <td>{{ obj.paginas }}</td>
+      <td>{{ obj.preco }}</td>
+      <td>{{ obj.avaliacao }}</td>
+      <td>
+        {% for a in obj.autores.all %}
+          {{ a }}
+        {% endfor %}
+      </td>
+      <td>{{ obj.editora }}</td>
+      <td>{{ obj.data_pub }}</td>
+      <td>
+        <a class="button error" href="{% url 'generic-delete' obj.pk 'estoque' 'Livro' %}?success_url={% url 'livro-list' %}">
+          APAGAARRR
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock content %}
+
