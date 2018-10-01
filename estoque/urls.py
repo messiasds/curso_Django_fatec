@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from . import views
 
 urlpatterns = [
-    path('', views.LivroSearchForm.as_view(template_name='index_publica.html'), name='index'),
+    path('', views.LivroSearchForm.as_view(template_name='estoque/index_publica.html'), name='index'),
     path('principal/',views.principal,name='principal'),
     path('livros/', include([
         path('teste/',views.LivroBuscaPublica.as_view(),name='livro-busca'),

@@ -1,4 +1,4 @@
-{% extends 'estoque/base.html' %}
+{% extends 'estoque/autenticado_base.html' %}
 
 {% block content %}
 
@@ -25,7 +25,7 @@
       {# contador de iterações do for #}
       <td>{{ forloop.counter }}</td>
       <td>{{ obj.pk }}</td>
-      <td> <a href="{%url 'autor-update' obj.pk %}"> {{obj.nome }}</td>
+      <td>  {{obj.nome }}</td>
       <td>{{ obj.idade }}</td>
     </tr>
     {% empty %}

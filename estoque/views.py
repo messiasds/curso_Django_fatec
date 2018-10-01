@@ -205,7 +205,7 @@ class LivroJsonListView(JsonListMixin, LivroListView):
 
 ## views da editora
 
-class EditoraCreateView(LoginRequiredMixin, CreateView):
+class EditoraCreateView(LoginRequiredMixin, PageInfoMixin,CreateView):
 
     model = Editora
     fields = "__all__"
@@ -216,7 +216,7 @@ class EditoraListView(ListView):
     model = Editora
     fields = "__all__"
 
-class EditoraUpdateView(LoginRequiredMixin,UpdateView):
+class EditoraUpdateView(LoginRequiredMixin,PageInfoMixin,UpdateView):
 
     model = Editora
     fileds = "__init__"
@@ -227,7 +227,7 @@ class EditoraUpdateView(LoginRequiredMixin,UpdateView):
 
 ## views Loja
 
-class LojaCreateView(LoginRequiredMixin,CreateView):
+class LojaCreateView(LoginRequiredMixin,PageInfoMixin,CreateView):
 
     model = Loja
     fields = ['nome','quantidade_de_clientes']
@@ -240,7 +240,7 @@ class LojaListView(ListView):
     fields = "__all__"
     success_url = reverse_lazy("loja-list")
 
-class LojaUpdateView(LoginRequiredMixin,UpdateView):
+class LojaUpdateView(LoginRequiredMixin,PageInfoMixin,UpdateView):
 
     model = Loja
     fileds  = "__all__"

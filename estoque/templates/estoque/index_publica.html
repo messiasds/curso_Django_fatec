@@ -1,7 +1,9 @@
 {% extends 'estoque/base.html' %}
 
 {% block content %}
-<h2> Publica  </h2>
+<h2> Busca Pública  </h2>
+<p><a href="{% url 'login' %}" class="button dark"> Fazer Login </a></p>
+<p> Faça login para para incluir livros, editoras e lojas </p>
 <form method="GET">
   {{ form.as_p }}
   <button type="submit" class="button primary">Filtrar</button>
@@ -11,8 +13,6 @@
   <caption>
     {{ page_info_plural }}
     <span class="is-right">
-      <a class="button primary" href="{% url 'livro-create' %}">Novo</a>
-    </span>
   </caption>
   <thead>
     <tr>
@@ -23,7 +23,6 @@
       <th>Autores</th>
       <th>Editora</th>
       <th>Data da Publicação</th>
-      <th>Remover</th>
     </tr>
   </thead>
   <tbody>
@@ -42,11 +41,6 @@
       </td>
       <td>{{ obj.editora }}</td>
       <td>{{ obj.data_pub }}</td>
-      <td>
-        <a class="button error" href="{% url 'generic-delete' obj.pk 'estoque' 'Livro' %}?success_url={% url 'livro-list' %}">
-          Remover
-        </a>
-      </td>
     </tr>
     {% endfor %}
   </tbody>
