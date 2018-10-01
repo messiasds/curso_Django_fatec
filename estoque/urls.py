@@ -12,6 +12,7 @@ urlpatterns = [
         path('list.json', views.LivroJsonListView.as_view(), name='livro-json-list'),
         path('novo/', views.LivroCreateView.as_view(), name='livro-create'),
         path('<int:pk>/', views.LivroUpdateView.as_view(), name='livro-update'),
+        path('avaliar/',views.avaliarLivro,name='avaliar-livro'),
     ])),
 
     path('autores/', include([

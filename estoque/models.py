@@ -38,6 +38,9 @@ class Livro(models.Model):
     data_pub = models.DateField()
     sinopse = models.TextField(null=True, blank=True)
 
+    avaliacaoPositiva = models.IntegerField(null=True,default=0)
+    avaliacaoNegativa = models.IntegerField(null=True,default=0)
+
     class Meta:
         verbose_name = "Livro"
         verbose_name_plural = "Livros"

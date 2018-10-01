@@ -6,7 +6,7 @@ from django.shortcuts import render
 
 from django.apps import apps
 from django.db.models import Avg
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
@@ -23,7 +23,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
 
-
+from django.contrib.auth.decorators import login_required
     
 
 
@@ -105,7 +105,7 @@ class AutorListView(PageInfoMixin, ModelFormMixin, ListView):
         self.object = None
         return super().get(request, *args, **kwargs)
 
-from django.contrib.auth.decorators import login_required
+
 
 
 class AutorCreateView(LoginRequiredMixin,PageInfoMixin, CreateView):
@@ -258,3 +258,24 @@ class LivroBuscaPublica(PageInfoMixin, SearchFormListView):
     form_class = LivroBuscaPublicaForm
     
 
+#AJAX
+
+def avaliarLivro(request):
+
+    num = int(request.GET.get('id'));
+    if request.GET.get('avaliacao') == 'positivo':
+        print("POTIIIIIIIIII")
+        livro= Livro.objects.get(id=num)
+        x =livro.avaliacaoPositiva + 1
+        livro.avaliacaoPositiva = x
+
+    if request.GET.get('avaliacao') == 'negativo':
+        livro= Livro.objects.get(id=num)
+        x =livro.avaliacaoNegativa + 1
+        livro.avaliacaoNegativa = x
+
+
+    livro.save()
+
+    return HttpResponse("Livro avaliado")
+    

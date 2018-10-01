@@ -1,4 +1,5 @@
 {% extends 'estoque/autenticado_base.html' %}
+
 {% block content %}
 
 <form id="autor-form" action="{% url 'autor-create' %}">
@@ -42,7 +43,6 @@
     event.preventDefault();
 
     var form = $(this);
-    alert(form.serialize());
     $.ajax({
         url: form.attr("action"),
         data: form.serialize(),
@@ -54,7 +54,7 @@
           } else {
             $("#autores-table").load( "{% url 'autor-list' %} #autores-table" );
             alert('Cadastrado com sucesso !!');
-            form.trigger("reset");
+           // form.trigger("reset");
           }
         }
       });

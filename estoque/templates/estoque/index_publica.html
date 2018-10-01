@@ -9,28 +9,34 @@
   <button type="submit" class="button primary">Filtrar</button>
 </form>
 
+<div id="tabela-livros">
 <table class="striped">
   <caption>
     {{ page_info_plural }}
-    <span class="is-right">
+   <!-- <span class="is-right">!-->
   </caption>
   <thead>
     <tr>
+      <th> ID </th>
       <th>Nome</th>
+      <th> Likes </th>
+      <th>Deslikes </th>
       <th>Páginas</th>
       <th>Preço</th>
       <th>Avaliação</th>
       <th>Autores</th>
       <th>Editora</th>
       <th>Data da Publicação</th>
+
     </tr>
   </thead>
   <tbody>
     {% for obj in object_list %}
     <tr>
-      <td>
-        <a href="{% url 'livro-update' obj.pk %}">{{ obj.nome }}</a>
-      </td>
+      <td> {{obj.id}} </td>
+      <td><a href="{% url 'livro-update' obj.pk %}">{{ obj.nome }}</a></td>
+      <td> {{ obj.avaliacaoPositiva }} </td>
+      <td> {{ obj.avaliacaoNegativa }} </td>
       <td>{{ obj.paginas }}</td>
       <td>{{ obj.preco }}</td>
       <td>{{ obj.avaliacao }}</td>
@@ -41,8 +47,60 @@
       </td>
       <td>{{ obj.editora }}</td>
       <td>{{ obj.data_pub }}</td>
+      <td><a href = # class="button primary" name="positivo"> like </a></td>
+      <td><a href = # class="button error" name="negativo"> dislike </a></td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+</div>
 {% endblock content %}
+{% block js %}
+<script type="text/javascript">
+
+
+$("#tabela-livros").on('click','a[name=positivo]',function(event){
+
+         event.preventDefault();
+        
+         var currentRow=$(this).closest("tr"); 
+         
+         var id=currentRow.find("td:eq(0)").text(); // get current row 1st TD value
+         
+    $.ajax({
+        url: '{% url 'avaliar-livro' %}',
+        data: {'id':id,'avaliacao':'positivo'},
+        method: 'GET',
+        success: function (data) {
+          alert(data);
+            $("#tabela-livros").load( "{% url 'index' %} #tabela-livros" );
+          }
+        });
+
+       });
+
+
+  $("#tabela-livros").on('click','a[name=negativo]',function(event){
+         
+         event.preventDefault();
+    
+         var currentRow=$(this).closest("tr"); 
+         
+         var id=currentRow.find("td:eq(0)").text(); // get current row 1st TD value
+        
+    $.ajax({
+        url: '{% url 'avaliar-livro' %}',
+        data: {'id':id,'avaliacao':'negativo'},
+        method: 'GET',
+        success: function (data) {
+          alert(data);
+            $("#tabela-livros").load( "{% url 'index' %} #tabela-livros" );
+          }
+        });
+
+       });
+
+
+
+</script>
+{% endblock js %}
